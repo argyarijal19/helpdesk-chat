@@ -1,5 +1,6 @@
 import React from 'react';
 import { FaPhoneAlt, FaRocketchat, FaVideo } from 'react-icons/fa';
+import FriendInfo from './FriendInfo';
 import Message from './Message';
 import MessageSend from './MessageSend';
 
@@ -7,6 +8,7 @@ const RightSide = () => {
   return (
     <div className='col-9'>
         <div className='right-side'>
+            <input type='checkbox' id='dot' />
             <div className='row'>
                 <div className='col-8'>
                     <div className='message-send-show'>
@@ -27,7 +29,7 @@ const RightSide = () => {
                                     <FaVideo />
                                 </div>
                                 <div className='icon'>
-                                    <FaRocketchat />
+                                   <label htmlFor='dot'><FaRocketchat /></label>
                                 </div>
                             </div>
                         </div>
@@ -36,7 +38,7 @@ const RightSide = () => {
                     </div>
                 </div>
                 <div className='col-4'>
-                    User About Page
+                    <FriendInfo />
                 </div>
             </div>
         </div>

@@ -42,7 +42,7 @@ const Message = () => {
         <div className='my-message'>
             <div className='image-message'>
                 <div className='my-text'>
-                    <p className='message-text'>How Are You ??</p>
+                    <p className='message-text'><img src='/image/4056439252.png' alt='' /></p>
                 </div>
             </div>
             <div className='time'>
