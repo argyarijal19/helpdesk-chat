@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaFileImage, FaGift, FaPaperPlane, FaPlusCircle } from 'react-icons/fa'
 
-const MessageSend = () => {
+const MessageSend = ({inputHandle, newMessage, sendMessage}) => {
 
     const emojis = [
         '😀', '😃', '😄', '😁',
@@ -32,20 +32,20 @@ const MessageSend = () => {
             </div>
             <FaGift />
         </div>
-        <div className='message-type'>
-            <input type='text' name='message' id='message' placeholder='Aa' className='form-control' />
-            <div className='file hover-gift'>
-                <label htmlFor='emoji'> <FaPaperPlane /> </label>
-            </div>
-        </div>
-        <div className='file'>
-        ♥
+        <div className='file hover-gift'>
+            <label htmlFor='emoji'> 😊 </label>
         </div>
         <div className='emoji-section'>
             <div className='emoji'>
                 {
                     emojis.map(e => <span>{e}</span>)
                 }
+            </div>
+        </div>
+        <div className='message-type'>
+            <input onChange={inputHandle} type='text' name='message' id='message' placeholder='Aa' className='form-control' value={newMessage} />
+            <div onClick={sendMessage} className='file'>
+                <FaPaperPlane />
             </div>
         </div>
     </div>

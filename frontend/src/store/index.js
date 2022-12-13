@@ -1,9 +1,12 @@
 import { createStore, compose, combineReducers, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { authReaducers } from './reducers/authReducer'; 
+import { messengerReducer } from './reducers/messengerReducer';
+
 
 const rootReducer = combineReducers({
-    auth: authReaducers
+    auth: authReaducers,
+    messenger: messengerReducer
 
 })
 
