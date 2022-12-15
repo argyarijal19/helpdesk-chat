@@ -1,5 +1,7 @@
+const formidable = require('formidable');
 const User = require('../models/authModel');
 const messageModel = require('../models/messageModel');
+const fs = require('fs');
 
 module.exports.getFriends = async(req, res) => {
     const myId = req.myId;
@@ -51,8 +53,7 @@ module.exports.messageGet = async (req, res) =>{
 
     try{
         let getAllMessage = await messageModel.find({})
-
-        getAllMessage = getAllMessage.filter(m=>m.senderId === myId && m.recieverId === fdid || m.recieverId === myId && m.recieverId === fdid);
+        getAllMessage = getAllMessage.filter(m=>m.senderId === myId && m.recieverId === fdid || m.recieverId === myId && m.senderId === fdid);
         res.status(200).json({
             success: true,
             message: getAllMessage
@@ -64,4 +65,49 @@ module.exports.messageGet = async (req, res) =>{
             }
         })
     }
+}
+
+module.exports.imageMessageSend = (req, res) => {
+    const senderId = req.myId;
+
+    const form = formidable();
+
+    form.parse(req, (err, fields, files) => {
+
+        const {senderName, imagename, recieverId} = fields;
+        const newPath = __dirname + `../../../frontend/public/image/${imagename}`
+        files.image.originalFilename = imagename;
+        try{
+            fs.copyFile(files.image.filepath, newPath, async (err) => {
+                if(err){
+                    res.status(500).json({
+                        error: {
+                            errorMessage: 'Image Upload Fail'
+                        }
+                    })
+                }else{
+                    const insertMessage = await messageModel.create({
+                        senderId: senderId,
+                        senderName: senderName,
+                        recieverId: recieverId,
+                        message: {
+                            text: '',
+                            image: files.image.originalFilename
+                        }
+                    })
+            
+                    res.status(201).json({
+                        success: true,
+                        message: insertMessage
+                    })
+                }
+            });
+        }catch (error){
+            res.status(500).json({
+                error: {
+                    errorMessage: 'Internal Server Error'
+                }
+            })
+        }
+    })
 }
