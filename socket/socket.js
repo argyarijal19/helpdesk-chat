@@ -49,6 +49,18 @@ io.on('connection', (socket) => {
         }
     })
 
+    socket.on('typingMessage', (data) => {
+        const user = findFriend(data.recieverId);
+        if(user !== undefined){
+            socket.to(user.socketId).emit('typingMessageGet', {
+                senderId: data.senderId,
+                recieverId: data.recieverId,
+                msg: data.msg
+            })
+        }
+        console.log(user)
+    })
+
 
     socket.on('disconnect', () => {
         console.log('user is disconnet....');
