@@ -12,8 +12,6 @@ import {io} from 'socket.io-client';
 
 const Messanger = () => {
 
-
-
     const scrollRef = useRef();
     const socket = useRef();
 
@@ -23,13 +21,19 @@ const Messanger = () => {
     const [newMessage, setnewMessage] = useState('');
     const [activeUser, setActiveUser] = useState([]);
     const [socketMessage, setSocketMessage] = useState('');
+    const [typingMessage, setTypingMessage] = useState('');
 
     useEffect(() => {
         socket.current = io('ws://localhost:8000');
         socket.current.on('getMessage', (data) => {
             setSocketMessage(data);
         })
+
+        socket.current.on('typingMessageGet', (data) => {
+            setTypingMessage(data);
+        })
     }, []);
+
 
     useEffect(() => {
         if(socketMessage && currentfriend){
@@ -58,6 +62,12 @@ const Messanger = () => {
 
     const inputHandle = (e) => {
         setnewMessage(e.target.value);
+
+        socket.current.emit('typingMessage', {
+            senderId: myInfo.id,
+            recieverId: currentfriend._id,
+            msg: e.target.value
+        })
     }
 
     const sendMessage = (e) => {
@@ -78,6 +88,13 @@ const Messanger = () => {
                 image: ''
             }
         })
+
+        socket.current.emit('typingMessage', {
+            senderId: myInfo.id,
+            recieverId: currentfriend._id,
+            msg: ''
+        })
+
         dispatch(messageSend(data));
         setnewMessage('');
     }
@@ -110,6 +127,11 @@ const Messanger = () => {
 
     const emojiSend = (emu) => {
         setnewMessage(`${newMessage}` + emu);
+        socket.current.emit('typingMessage', {
+            senderId: myInfo.id,
+            recieverId: currentfriend._id,
+            msg: emu
+        })
     }
 
     const imageSend = (e) =>{
@@ -117,6 +139,17 @@ const Messanger = () => {
         if(e.target.files.length !== 0){
             const imageName = e.target.files[0].name;
             const newImageName = Date.now() + imageName;
+
+            socket.current.emit('sendMessage', {
+                senderId: myInfo.id,
+                senderName: myInfo.userName,
+                recieverId: currentfriend._id,
+                time: new Date(),
+                message: {
+                    text:'',
+                    image: newImageName
+                }
+            })
 
             const formData = new FormData();
             formData.append('senderName', myInfo.userName);
@@ -179,7 +212,7 @@ const Messanger = () => {
                 </div>
             </div>
             {
-                currentfriend ? <RightSide currentfriend={currentfriend} inputHandle={inputHandle} newMessage={newMessage} sendMessage={sendMessage} message={message} scrollRef={scrollRef} emojiSend={emojiSend} imageSend={imageSend} activeUser={activeUser} /> : 'Please Select Your Friend'
+                currentfriend ? <RightSide currentfriend={currentfriend} inputHandle={inputHandle} newMessage={newMessage} sendMessage={sendMessage} message={message} scrollRef={scrollRef} emojiSend={emojiSend} imageSend={imageSend} activeUser={activeUser} typingMessage={typingMessage} /> : 'Please Select Your Friend'
             }
         </div>
     </div>
