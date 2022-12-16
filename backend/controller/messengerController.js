@@ -52,8 +52,31 @@ module.exports.messageGet = async (req, res) =>{
     const fdid = req.params.id;
 
     try{
-        let getAllMessage = await messageModel.find({})
-        getAllMessage = getAllMessage.filter(m=>m.senderId === myId && m.recieverId === fdid || m.recieverId === myId && m.senderId === fdid);
+        let getAllMessage = await messageModel.find({
+            $or: [{
+                $and: [{
+                    senderId:{
+                        $eq: myId
+                    }
+                }, {
+                    recieverId: {
+                        $eq: fdid
+                    }
+                }]
+            }, {
+                $and:[{
+                    senderId: {
+                        $eq: fdid
+                    }
+                }, {
+                    recieverId: {
+                        $eq : myId
+                    }
+                }]
+            }]
+        })
+        // getAllMessage = getAllMessage.filter(m=>m.senderId === myId && m.recieverId === fdid || m.recieverId === myId && m.senderId === fdid);
+        
         res.status(200).json({
             success: true,
             message: getAllMessage

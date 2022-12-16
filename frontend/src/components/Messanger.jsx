@@ -6,11 +6,18 @@ import Friends from './Friends';
 import RightSide from './RightSide';
 import { getFriends, messageSend, getMessage, imageMessageSend } from '../store/actions/messengerActions';
 import {io} from 'socket.io-client';
+import toas, { Toaster } from 'react-hot-toast';
+import useSound from 'use-sound';
+import notificationSound from '../audio/notification.mp3';
+import sendingSound from '../audio/sending.mp3'
 
 
 
 
 const Messanger = () => {
+
+    const [notificationPlay] = useSound(notificationSound);
+    const [sendingPlay] = useSound(sendingSound);
 
     const scrollRef = useRef();
     const socket = useRef();
@@ -60,6 +67,14 @@ const Messanger = () => {
         })
     }, []);
 
+    useEffect(() => {
+        if( socketMessage && socketMessage.senderId !== currentfriend._id && socketMessage.recieverId === myInfo.id){
+            notificationPlay();
+            toas.success(`${socketMessage.senderName} Send New Message !!`)
+        }
+
+    }, [socketMessage]);
+
     const inputHandle = (e) => {
         setnewMessage(e.target.value);
 
@@ -72,6 +87,7 @@ const Messanger = () => {
 
     const sendMessage = (e) => {
         e.preventDefault();
+        sendingPlay();
         const data = {
             senderName: myInfo.userName,
             recieverId: currentfriend._id,
@@ -127,6 +143,7 @@ const Messanger = () => {
 
     const emojiSend = (emu) => {
         setnewMessage(`${newMessage}` + emu);
+        sendingPlay();
         socket.current.emit('typingMessage', {
             senderId: myInfo.id,
             recieverId: currentfriend._id,
@@ -137,6 +154,7 @@ const Messanger = () => {
     const imageSend = (e) =>{
 
         if(e.target.files.length !== 0){
+            sendingPlay();
             const imageName = e.target.files[0].name;
             const newImageName = Date.now() + imageName;
 
@@ -166,6 +184,15 @@ const Messanger = () => {
 
   return (
     <div className='messenger'>
+        <Toaster 
+        position={'top-right'}
+        reverseOrder={false}
+        toastOptions={{
+            style:{
+                fontSize: '18px'
+            }
+        }}
+        />
         <div className='row'>
             <div className='col-3'>
                 <div className='left-side'>
