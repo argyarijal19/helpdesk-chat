@@ -40,14 +40,20 @@
                                     bottom: 0pc;
                                 } 
                             }
+
                             .name{
                                 display: flex;
                                 justify-content: center;
                                 align-items: center;
+                                padding-left: 50px;
                                 h3{
-                                    padding-left: 10px;
+                                    padding-left: 100px;
                                     color: var(--text-color);
+
+                                
+                               
                                 }
+
                             }
                         }
                         .icons{
@@ -73,15 +79,18 @@
                             }
                         }
                     }
+
                 }
+                
             }
+
+
 
         }
         #dot{
             display: none;
-        }
-        #dot:checked ~ .row .col-4{
-            display: none;
+
+            
         }
         #dot:checked ~ .row .col-8{
             width: 100%;
@@ -92,5 +101,14 @@
         #dot:checked ~ .row .col-8 .message-show .fd-message .fd-text{
             width: 500px;
         }
+    }
+}
+span{
+    padding: 10px;
+    @media (min-width:480px) {
+        display: none;
+    }
+    @include mobile{
+        width: 50%;
     }
 }

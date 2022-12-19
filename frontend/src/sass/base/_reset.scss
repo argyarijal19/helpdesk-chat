@@ -51,3 +51,17 @@ a{
 li{
     list-style: none;
 }
+
+
+@mixin mobile {
+    @media (max-width:480px) {
+        @content;
+        
+    }
+}
+
+@mixin dekstop {
+    @media (max-width:1080px) {
+        @content;
+    }
+}

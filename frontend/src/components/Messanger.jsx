@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef }from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import { FaEdit, FaEllipsisH, FaSistrix } from 'react-icons/fa';
+import { FaEdit, FaEllipsisH, FaSistrix, FaHome} from 'react-icons/fa';
 import ActiveFriend from './ActiveFriend';
 import Friends from './Friends';
 import RightSide from './RightSide';
@@ -207,11 +207,9 @@ const Messanger = () => {
                         </div>
                         <div className='icons'>
                             <div className='icon'>
-                                <FaEllipsisH />
+                                <FaHome />
                             </div>
-                            <div className='icon'>
-                                <FaEdit />
-                            </div>
+
                         </div>
                     </div>
                     <div className='friend-search'>
