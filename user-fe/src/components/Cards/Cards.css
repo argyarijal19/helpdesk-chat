@@ -1,0 +1,28 @@
+.Cards {
+display: grid;
+grid-template-columns: repeat(5, 0fr);
+grid-template-rows: repeat(1, 1fr);
+grid-column-gap: 10px;
+grid-row-gap: 10px;
+justify-content: space-between;
+align-content: center;
+}
+.parentContainer{
+  width: 100%;
+}
+
+@media screen and (max-width: 1200px) {
+  .Cards{
+    flex-direction: column;
+  }
+  .parentContainer{
+    height: 9rem;
+  }
+}
+
+@media screen and (max-width: 768px)
+{
+  .Cards{
+    width: 90%;
+  }
+}
